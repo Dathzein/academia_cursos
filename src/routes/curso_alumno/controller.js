@@ -9,8 +9,8 @@ const asignarCurso = (data) =>{
     return db.add(tabla, data)
 }
 
-const obtenerPorAlumno = (id) =>{
-    return db.getCursoAlumnoByAlumno(id)
+const obtenerPorAlumno = (data) =>{
+    return db.getCursoAlumnoByAlumno(data)
 }
 
 module.exports = {

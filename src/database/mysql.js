@@ -68,7 +68,7 @@ const update = (tabla, data) => {
     return new Promise((resolve, reject) => {
         console.log(data)
         let query = `UPDATE ${tabla} SET ? WHERE id = ?`;
-        connection.query(query, [data, data.id], function (error, result) {
+        connection.query(query, [data, data.id], (error, result) => {
             console.log(result.affectedRows)
             return error ? reject(error) : resolve(result);
         });
@@ -104,11 +104,11 @@ const getCursoAlumno = () => {
     })
 }
 
-const getCursoAlumnoByAlumno = (id) => {
+const getCursoAlumnoByAlumno = (data) => {
     return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM curso 
         INNER JOIN curso_alumno ON curso_alumno.id_curso = curso.id 
-        INNER JOIN usuarios ON usuarios.id = curso_alumno.id_alumno WHERE id_alumno = ${id}`, (error, result) => {
+        INNER JOIN usuarios ON usuarios.id = curso_alumno.id_alumno WHERE id_alumno = ?`, [data.id], (error, result) => {
             return error ? reject(error) : resolve(result);
 
         });
