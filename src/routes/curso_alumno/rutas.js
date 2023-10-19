@@ -7,7 +7,7 @@ const controller = require('./controller');
 const router = express.Router();
 
 router.get('/', consultar);
-router.get('/asignados', consultarByAlumno);
+router.post('/asignados', consultarByAlumno);
 router.post('/', asignarCurso);
 router.put('/', eliminarUsuario);
 
