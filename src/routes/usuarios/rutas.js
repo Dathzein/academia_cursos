@@ -7,6 +7,7 @@ const controller = require('./controller');
 const router = express.Router();
 
 router.get('/', consultarUsuarios);
+router.get('/alumnos', consultarAlumnos);
 router.get('/:id', consultarUsuario);
 router.post('/', agregarUsuario);
 router.put('/', eliminarUsuario);
@@ -15,6 +16,14 @@ router.post('/login', iniciarSesion);
 async function consultarUsuarios(req, res, next) {
     try {
         const items = await controller.obtenerUsuarios()
+        respuesta.success(req, res, items, 200);
+    } catch (error) {
+        next(error);
+    }
+}
+async function consultarAlumnos(req, res, next) {
+    try {
+        const items = await controller.obtenerAlumnos()
         respuesta.success(req, res, items, 200);
     } catch (error) {
         next(error);

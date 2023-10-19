@@ -3,7 +3,10 @@ const db = require('../../database/mysql');
 const tabla = 'usuarios';
 
 const obtenerUsuarios = () =>{
-    return db.getAll(tabla)
+    return db.getUsuarios(tabla)
+}
+const obtenerAlumnos = () =>{
+    return db.getAlumnos(tabla)
 }
 const obtenerUsuario = (id) =>{
     return db.getSingle(tabla, id)
@@ -37,5 +40,6 @@ module.exports = {
     obtenerUsuario,
     agregarUsuario,
     eliminarUsuario,
-    login
+    login,
+    obtenerAlumnos
 }
