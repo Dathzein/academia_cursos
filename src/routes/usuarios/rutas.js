@@ -41,12 +41,12 @@ async function consultarUsuario(req, res, next) {
 async function agregarUsuario(req, res, next) {
     try {
         const item = await controller.agregarUsuario(req.body)
-        if(req.body.id == 0){
+        if(!req.body.id){
             mensaje = 'usuario guardado.'
         }else{
             mensaje = 'usuario actualizado.'
         }
-        respuesta.success(req, res, mensaje, 201);
+        respuesta.success(req, res, [item, mensaje], 201);
     } catch (error) {
         next(error);
     }
