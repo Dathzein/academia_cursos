@@ -10,21 +10,21 @@ const dbConfig = {
 
 let connection;
 
-const conexionMysql = () =>{
+const conexionMysql = () => {
     connection = mysql.createConnection(dbConfig);
-    connection.connect((err) =>{
-        if(err){
+    connection.connect((err) => {
+        if (err) {
             console.error('[ db error ]', err);
             setTimeout(conexionMysql(), 200);
-        }else{
+        } else {
             console.log('Conectado pa');
         }
     });
 
-    connection.on('error', err =>{
-        if(err.code === 'PROTOCOL_CONNECTION_LOST'){
+    connection.on('error', err => {
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
             conexionMysql()
-        }else{
+        } else {
             throw err;
         }
     })
@@ -32,117 +32,119 @@ const conexionMysql = () =>{
 
 conexionMysql();
 
-const getAll = (tabla) =>{
-    return new Promise( (resolve, reject) =>{
-        connection.query(`SELECT * FROM ${tabla}`, (error, result) =>{
+const getAll = (tabla) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT * FROM ${tabla}`, (error, result) => {
             return error ? reject(error) : resolve(result);
-            
+
         });
     })
 }
-const getSingle = (tabla, id) =>{
-    return new Promise( (resolve, reject) =>{
-        connection.query(`SELECT * FROM ${tabla} WHERE id = ${id}`, (error, result) =>{
+const getSingle = (tabla, id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`SELECT * FROM ${tabla} WHERE id = ${id}`, (error, result) => {
             return error ? reject(error) : resolve(result);
         });
     })
 }
-const add = (tabla, data) =>{
-    if(data && !data.id){
+const add = (tabla, data) => {
+    if (data && !data.id) {
         return insert(tabla, data);
-    }else{
+    } else {
         return update(tabla, data);
     }
 
 }
-const insert = (tabla, data) =>{
+const insert = (tabla, data) => {
 
-    return new Promise( (resolve, reject) =>{
-        connection.query(`INSERT INTO ${tabla}  SET ?`, data, (error, result) =>{
+    return new Promise((resolve, reject) => {
+        connection.query(`INSERT INTO ${tabla}  SET ?`, data, (error, result) => {
             return error ? reject(error) : resolve(result);
         });
     })
 
 }
-const update = (tabla, data) =>{
-
-    return new Promise( (resolve, reject) =>{
-        connection.query(`UPDATE ${tabla} SET ? WHERE id = ?`, [data, data.id], (error, result) =>{
+const update = (tabla, data) => {
+    return new Promise((resolve, reject) => {
+        console.log(data)
+        let query = `UPDATE ${tabla} SET ? WHERE id = ?`;
+        connection.query(query, [data, data.id], function (error, result) {
+            console.log(result.affectedRows)
             return error ? reject(error) : resolve(result);
         });
     })
 
 }
-const deleteReg = (tabla, data) =>{
-    return new Promise( (resolve, reject) =>{
-        connection.query(`DELETE FROM ${tabla} WHERE id = ?`, data.id, (error, result) =>{
+const deleteReg = (tabla, data) => {
+    return new Promise((resolve, reject) => {
+        connection.query(`DELETE FROM ${tabla} WHERE id = ${data.id}`, (error, result) => {
             return error ? reject(error) : resolve(result);
         });
     })
 }
 
-const getUsuarioPerfil = () =>{
-    return new Promise( (resolve, reject) =>{
+const getUsuarioPerfil = () => {
+    return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM usuarios 
         INNER JOIN perfil_usuario ON perfil_usuario.id_user = usuarios.id 
-        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil`, (error, result) =>{
+        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil`, (error, result) => {
             return error ? reject(error) : resolve(result);
-            
+
         });
     })
 }
-const getCursoAlumno = () =>{
-    return new Promise( (resolve, reject) =>{
+const getCursoAlumno = () => {
+    return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM curso 
         INNER JOIN curso_alumno ON curso_alumno.id_curso = curso.id 
-        INNER JOIN usuarios ON usuarios.id = curso_alumno.id_alumno`, (error, result) =>{
+        INNER JOIN usuarios ON usuarios.id = curso_alumno.id_alumno`, (error, result) => {
             return error ? reject(error) : resolve(result);
-            
+
         });
     })
 }
 
-const getCursoAlumnoByAlumno = (id) =>{
-    return new Promise( (resolve, reject) =>{
+const getCursoAlumnoByAlumno = (id) => {
+    return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM curso 
         INNER JOIN curso_alumno ON curso_alumno.id_curso = curso.id 
-        INNER JOIN usuarios ON usuarios.id = curso_alumno.id_alumno WHERE id_alumno = ${id}`, (error, result) =>{
+        INNER JOIN usuarios ON usuarios.id = curso_alumno.id_alumno WHERE id_alumno = ${id}`, (error, result) => {
             return error ? reject(error) : resolve(result);
-            
+
         });
     })
 }
 
-const logIn = (tabla, data) =>{
-    return new Promise( (resolve, reject) =>{
+const logIn = (tabla, data) => {
+    return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM ${tabla} 
         INNER JOIN perfil_usuario ON perfil_usuario.id_user = usuarios.id 
-        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil WHERE usuarios.email = ? AND usuarios.contrasena = ?`,[data.email, data.contrasena], (error, result) =>{
+        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil WHERE usuarios.email = ? AND usuarios.contrasena = ?`, [data.email, data.contrasena], (error, result) => {
             return error ? reject(error) : resolve(result);
-            
+
         });
     })
 }
 
-const getAlumnos = (tabla) =>{
-    return new Promise( (resolve, reject) =>{
+const getAlumnos = (tabla) => {
+    return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM ${tabla} 
         INNER JOIN perfil_usuario ON perfil_usuario.id_user = usuarios.id 
-        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil WHERE perfil.id  = 2 `, (error, result) =>{
+        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil WHERE perfil.id  = 2 `, (error, result) => {
             return error ? reject(error) : resolve(result);
-            
+
         });
     })
 }
 
 
-const getUsuarios = (tabla) =>{
-    return new Promise( (resolve, reject) =>{
+const getUsuarios = (tabla) => {
+    return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM ${tabla} 
         INNER JOIN perfil_usuario ON perfil_usuario.id_user = usuarios.id 
-        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil WHERE perfil.id  = 1 `, (error, result) =>{
+        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil WHERE perfil.id  = 1 `, (error, result) => {
             return error ? reject(error) : resolve(result);
-            
+
         });
     })
 }
