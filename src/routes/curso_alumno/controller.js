@@ -9,7 +9,12 @@ const asignarCurso = (data) =>{
     return db.add(tabla, data)
 }
 
+const obtenerPorAlumno = (id) =>{
+    return db.getCursoAlumnoByAlumno(id)
+}
+
 module.exports = {
     obtenerCursoAlumno,
     asignarCurso,
+    obtenerPorAlumno,
 }

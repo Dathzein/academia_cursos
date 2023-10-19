@@ -102,6 +102,17 @@ const getCursoAlumno = () =>{
     })
 }
 
+const getCursoAlumnoByAlumno = (id) =>{
+    return new Promise( (resolve, reject) =>{
+        connection.query(`SELECT * FROM curso 
+        INNER JOIN curso_alumno ON curso_alumno.id_curso = curso.id 
+        INNER JOIN usuarios ON usuarios.id = curso_alumno.id_alumno WHERE id_alumno = ${id}`, (error, result) =>{
+            return error ? reject(error) : resolve(result);
+            
+        });
+    })
+}
+
 module.exports = {
     getAll,
     getSingle,
@@ -109,4 +120,5 @@ module.exports = {
     deleteReg,
     getUsuarioPerfil,
     getCursoAlumno,
+    getCursoAlumnoByAlumno
 }

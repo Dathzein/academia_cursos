@@ -7,7 +7,7 @@ const controller = require('./controller');
 const router = express.Router();
 
 router.get('/', consultar);
-router.get('/:id', consultarUsuario);
+router.get('/:id', consultarByAlumno);
 router.post('/', asignarCurso);
 router.put('/', eliminarUsuario);
 
@@ -34,9 +34,9 @@ async function asignarCurso(req, res, next) {
     }
 }
 
-async function consultarUsuario(req, res, next) {
+async function consultarByAlumno(req, res, next) {
     try {
-        const item = await controller.obtenerUsuario(req.params.id)
+        const item = await controller.obtenerPorAlumno(req.params.id)
         respuesta.success(req, res, item, 200);
     } catch (error) {
         next(error);
