@@ -15,9 +15,27 @@ const eliminarUsuario = (data) =>{
     return db.deleteReg(tabla, data)
 }
 
+const login = (usu, contrasena) =>{
+    const authData = {
+        email: usu,
+        contrasena: contrasena
+    }
+
+    if(usu){
+        authData.email = usu
+    }
+    if(contrasena){
+        authData.contrasena = contrasena
+    }
+
+    return db.logIn(tabla, authData)
+    
+}
+
 module.exports = {
     obtenerUsuarios,
     obtenerUsuario,
     agregarUsuario,
-    eliminarUsuario
+    eliminarUsuario,
+    login
 }

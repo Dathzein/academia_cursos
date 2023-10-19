@@ -113,6 +113,17 @@ const getCursoAlumnoByAlumno = (id) =>{
     })
 }
 
+const logIn = (tabla, data) =>{
+    return new Promise( (resolve, reject) =>{
+        connection.query(`SELECT * FROM ${tabla} 
+        INNER JOIN perfil_usuario ON perfil_usuario.id_user = usuarios.id 
+        INNER JOIN perfil ON perfil.id = perfil_usuario.id_perfil WHERE usuarios.email = ? AND usuarios.contrasena = ?`,[data.email, data.contrasena], (error, result) =>{
+            return error ? reject(error) : resolve(result);
+            
+        });
+    })
+}
+
 module.exports = {
     getAll,
     getSingle,
@@ -120,5 +131,6 @@ module.exports = {
     deleteReg,
     getUsuarioPerfil,
     getCursoAlumno,
-    getCursoAlumnoByAlumno
+    getCursoAlumnoByAlumno,
+    logIn
 }

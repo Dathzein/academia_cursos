@@ -10,6 +10,7 @@ router.get('/', consultarUsuarios);
 router.get('/:id', consultarUsuario);
 router.post('/', agregarUsuario);
 router.put('/', eliminarUsuario);
+router.post('/login', iniciarSesion);
 
 async function consultarUsuarios(req, res, next) {
     try {
@@ -45,6 +46,19 @@ async function eliminarUsuario(req, res, next) {
     try {
         const items = await controller.eliminarUsuario(req.body)
         respuesta.success(req, res, 'Usuario eliminado', 200);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function iniciarSesion(req, res, next){
+    let username = req.body.email;
+	let password = req.body.contrasena;
+    try {
+        if(username && password){
+            const usuario = await controller.login(username, password)
+            respuesta.success(req, res, usuario, 200);
+        }      
     } catch (error) {
         next(error);
     }
